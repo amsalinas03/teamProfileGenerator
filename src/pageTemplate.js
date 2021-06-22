@@ -67,7 +67,7 @@ const wholeTeam = team => {
 
 }
 
-// export function to generate entire page
+// exports the actual page
 module.exports = team => {
 
     return `
@@ -82,9 +82,7 @@ module.exports = team => {
 </head>
 
 <body>
-    <div class="container">
     ${wholeTeam(team)}
-    </div>
 </body>
 </html>
     `;
