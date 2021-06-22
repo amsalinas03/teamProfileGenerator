@@ -1,11 +1,13 @@
-import { Employee, Engineer, Intern, Manager } from "./models/employeeModels";
+const Employee = require("./models/employeeModels");
+const Manager = require("./models/employeeModels");
+const Intern = require("./models/employeeModels");
+const Engineer = require("./models/employeeModels");
 const inquirer = require("inquirer");
 const fs = require("fs");
+const render = require("./src/pageTemplate")
 
-const managers = []
 const employeeIds = []
 const teamMembers = []
-
 function mainMenu() {
     function newManager() {
         inquirer.prompt([
@@ -13,11 +15,6 @@ function mainMenu() {
                 type: "input",
                 name: "managerName",
                 message: "Please enter a manager's name",
-                validate: answer => {
-                    if (answer.length == 0) {
-                        return "Please enter a valid name"
-                    }
-                }
             },
             {
                 type: "input",
@@ -36,13 +33,14 @@ function mainMenu() {
             }
         ]).then(answers => {
             const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOffice);
-            managers.push(manager);
+            teamMembers.push(manager);
             employeeIds.push(answers.managerId)
             buildTeam();
         })
     }
+    newManager();
 }
-
+mainMenu();
 function buildTeam() {
     inquirer.prompt([
         {type:"list",
@@ -55,15 +53,16 @@ function buildTeam() {
             "None"
         ]
         }
-    ]).then (choice => {
+    ]).then(choice => {
         if (choice.addAnEmployee == "Engineer") {
             addEngineer();
         } else if (choice.addAnEmployee == "Intern"){
-            addIntern()
+            addIntern();
         } else if (choice.addAnEmployee == "New Manager") {
-            newManager()
+            newManager();
         } else {
-            console.log("Thank you for using my app! Generating your page now...")
+            console.log("Thank you for using my app! Generating your page now...");
+            createPage();
         }
     })
 }
@@ -74,11 +73,6 @@ function addEngineer() {
             type: "input",
             name: "engineerName",
             message: "Please enter the engineer's name",
-            validate: answer => {
-                if (answer.length == 0) {
-                    return "Please enter a valid name"
-                }
-            }
         },
         {
             type: "input",
@@ -115,7 +109,8 @@ function endOfAddAnEmployee () {
         if (choice.yesOrNo == "Yes") {
             buildTeam();
         } else {
-            console.log("Thank you for using my app! Generating your page now...")
+            console.log("Thank you for using my app! Generating your page now...");
+            createPage();
         }
     })
 }
@@ -124,22 +119,17 @@ function addIntern() {
         {
             type: "input",
             name: "internName",
-            message: "Please enter the engineer's name",
-            validate: answer => {
-                if (answer.length == 0) {
-                    return "Please enter a valid name"
-                }
-            }
+            message: "Please enter the intern's name",
         },
         {
             type: "input",
             name: "internId",
-            message: "Please enter the engineer's ID number"
+            message: "Please enter the intern's ID number"
         },
         {
             type: "input",
             name: "internEmail",
-            message: "Please enter the engineer's email"
+            message: "Please enter the intern's email"
         },
         {
             type: "input",
@@ -151,4 +141,7 @@ function addIntern() {
             endOfAddAnEmployee();
         })
 }
-mainMenu();
+
+function createPage() {
+    fs.writeFileSync("page.html",render(teamMembers), "utf-8")
+}

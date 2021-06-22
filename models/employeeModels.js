@@ -1,26 +1,64 @@
-export function Employee (name, id, email) {
-    this.name = name,
-    this.id = id,
-    this.email = email
-}
+class Employee {
+    constructor(name, id, email) {
+      this.name = name;
+      this.id = id;
+      this.email = email;
+    }
+    getName() {
+      return this.name;
+    }
+    getId() {
+      return this.id;
+    }
+    getEmail() {
+      return this.email;
+    }
+    getRole() {
+      return "Employee";
+    }
+  }
 
-export function Engineer (name, id, email, github) {
-    this.name = name,
-    this.id = id,
-    this.email = email,
-    this.github = github
+  class Engineer extends Employee {
+    constructor(name, id, email, github) {
+      super(name, id, email);
+      this.github = github;
+    }
+    getRole() {
+      return "Engineer";
+    }
+    getGithub() {
+      return this.github;
+    }
 }
+class Intern extends Employee {
+    constructor(name, id, email, school) {
+      super(name, id, email);
+      this.school = school;
+    }
+    getRole() {
+      return "Intern";
+    }
+  getSchool() {
+      return this.school;
+    }  
+}
+class Manager extends Employee {
 
-export function Intern (name, id, email, school) {
-    this.name = name,
-    this.id = id,
-    this.email = email,
-    this.school = school
+    constructor(name, id, email, officeNumber) {
+      super(name, id, email);
+      this.officeNumber = officeNumber;
+    }
+  
+    getRole() {
+      return "Manager";
+    }
+  
+    getOfficeNumber() {
+      return this.officeNumber;
+    }
 }
-
-export function Manager (name, id, email, officeNumber) {
-    this.name = name,
-    this.id = id,
-    this.email = email,
-    this.officeNumber = officeNumber
-}
+  module.exports = Manager;  
+  module.exports = Intern;
+  module.exports = Engineer;
+  module.exports = Employee;
+  
